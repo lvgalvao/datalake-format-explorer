@@ -1666,7 +1666,9 @@ Recomenda o formato com o menor volume total.</p>
 <span class="normal">61</span>
 <span class="normal">62</span>
 <span class="normal">63</span>
-<span class="normal">64</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">analyze_file_sizes</span><span class="p">(</span><span class="n">artist_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">analyze_file_sizes</span><span class="p">(</span><span class="n">artist_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Analisa e compara o tamanho dos arquivos gerados em diferentes formatos.</span>
 <span class="sd">    Recomenda o formato com o menor volume total.</span>
@@ -1691,8 +1693,8 @@ Recomenda o formato com o menor volume total.</p>
 
     <span class="c1"># Calcula as somas dos tamanhos</span>
     <span class="n">total_csv_size</span> <span class="o">=</span> <span class="n">csv_size</span>
-    <span class="n">total_json_size</span> <span class="o">=</span>  <span class="n">json_size</span>
-    <span class="n">total_parquet_size</span> <span class="o">=</span>  <span class="n">parquet_size</span>
+    <span class="n">total_json_size</span> <span class="o">=</span> <span class="n">json_size</span>
+    <span class="n">total_parquet_size</span> <span class="o">=</span> <span class="n">parquet_size</span>
 
     <span class="c1"># Determina o formato com o menor volume total</span>
     <span class="n">smallest_format</span> <span class="o">=</span> <span class="s2">&quot;CSV&quot;</span>
@@ -1711,7 +1713,9 @@ Recomenda o formato com o menor volume total.</p>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tamanho total do arquivo CSV: </span><span class="si">{</span><span class="n">total_csv_size</span><span class="si">}</span><span class="s2"> bytes&quot;</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tamanho total do arquivo JSON: </span><span class="si">{</span><span class="n">total_json_size</span><span class="si">}</span><span class="s2"> bytes&quot;</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tamanho total do arquivo Parquet: </span><span class="si">{</span><span class="n">total_parquet_size</span><span class="si">}</span><span class="s2"> bytes&quot;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recomendação: Use o formato </span><span class="si">{</span><span class="n">smallest_format</span><span class="si">}</span><span class="s2"> com o menor volume total.&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Recomendação: Use o formato </span><span class="si">{</span><span class="n">smallest_format</span><span class="si">}</span><span class="s2"> com o menor volume total.&quot;</span>
+    <span class="p">)</span>
 
     <span class="c1"># Retorna o formato recomendado</span>
     <span class="k">return</span> <span class="n">smallest_format</span>
