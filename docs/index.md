@@ -4,6 +4,10 @@
 
 O projeto consiste em coletar dados de uma API do Spotify, transformar os dados em diferentes formatos e armazenar em um bucket na AWS.
 
+O objetivo final é fazer uma análise sobre os 3 tipos de arquivo gerado, CSV, Parquet e JSON, e verificar qual o melhor formato para armazenar os dados.
+
+A análise final é salva em um arquivo do tipo LOG localmente
+
 ## Fluxo
 
 ```mermaid
@@ -18,7 +22,6 @@ flowchart LR
         C -->|Salva como CSV| D1[Bucket AWS]
         C -->|Salva como Parquet| D1[Bucket AWS]
         C -->|Salva como JSON| D1[Bucket AWS]
-        C -->|Salva como XLS| D1[Bucket AWS]
     end
 ```
 
