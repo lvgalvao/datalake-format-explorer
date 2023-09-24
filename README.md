@@ -68,17 +68,6 @@ Alguns pontos interessantes:
 
     Certifique-se de usar aspas duplas ao redor do nome do artista se o nome tiver espaços.
 
-8. Alternativamente, você pode executar a pipeline usando o ambiente Poetry. Após ativar o ambiente virtual, execute o seguinte comando, substituindo `"Nome do Artista"` pelo nome do artista que você deseja processar:
+8. Após a execução, os dados do artista serão extraídos, transformados em diferentes formatos (CSV, JSON e Parquet) e carregados em um "datalake" local.
 
-    ```bash
-    python -m app.pipeline "Nome do Artista"
-    ```
-
-9. Após a execução, os dados do artista serão extraídos, transformados em diferentes formatos (CSV, JSON e Parquet) e carregados em um "datalake" local.
-
-10. Os arquivos gerados podem ser encontrados na pasta `data` do projeto e também serão enviados para o LocalStack S3, onde você pode acessá-los usando as ferramentas do LocalStack.
-
-
-## Licença
-
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para obter detalhes.
+9.  Os arquivos gerados podem ser encontrados na pasta `data` do projeto e também serão enviados para o LocalStack S3, onde você pode acessá-los usando as ferramentas do LocalStack.

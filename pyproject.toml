@@ -23,6 +23,7 @@ pydantic = "^2.3.0"
 httpx = "^0.25.0"
 polars = "^0.19.3"
 boto3 = "^1.28.53"
+loguru = "^0.7.2"
 
 [tool.isort]
 profile = "black"
