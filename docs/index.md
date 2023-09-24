@@ -1,17 +1,28 @@
 # Welcome to MkDocs
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+## Descrição
 
-## Commands
+O projeto consiste em coletar dados de uma API do Spotify, transformar os dados em diferentes formatos e armazenar em um bucket na AWS.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+## Fluxo
 
-## Project layout
+```mermaid
+flowchart LR
+    A[Manager Spotify: Coleta de Dados] -->|Extrai dados| B(Manager Pandas: Converte Formatos)
+    B -->|Converte p/ CSV| C[Load: Salva no Bucket]
+    B -->|Converte p/ Parquet| C[Manager AWS: Salva no Bucket]
+    B -->|Converte p/ JSON| C[Manager AWS: Salva no Bucket]
+    B -->|Converte p/ XLS| C[Manager AWS: Salva no Bucket]
+    C -->|Salva como CSV| D1[Bucket AWS]
+    C -->|Salva como Parquet| D1[Bucket AWS]
+    C -->|Salva como JSON| D1[Bucket AWS]
+    C -->|Salva como XLS| D1[Bucket AWS]
+```
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+## Módulos
+
+### ::: app.ETL.manager_spotify
+
+### ::: app.ETL.manager_pandas
+
+### ::: app.ETL.manager_aws
