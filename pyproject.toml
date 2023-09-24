@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "datalake-format-explorer"
+version = "0.1.0"
+description = ""
+authors = ["Luciano Filho <lvgalvaofilho@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "datalake_format_explorer" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pre-commit = "^3.4.0"
+makefile = "^1.1.0"
+isort = "^5.12.0"
+black = "^23.9.1"
+pytest = "^7.4.2"
+mkdocs = "^1.5.3"
+
+[tool.isort]
+profile = "black"
+known_third_party = []
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
