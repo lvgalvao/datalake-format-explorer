@@ -1,5 +1,7 @@
 """Essa módulo é responsável por executar a pipeline de ETL."""
 
+import sys
+
 from .ETL.manager_aws import create_bucket, upload_to_s3
 from .ETL.manager_polars import save_data_to_formats
 from .ETL.manager_spotify import get_all_artist_details
@@ -27,5 +29,9 @@ def etl_pipeline(artist_name: str):
 
 
 if __name__ == "__main__":
-    artist_name = "Raul Seixas"  # Replace with the artist name you want to process
+    if len(sys.argv) != 2:
+        print("Uso: python -m app.pipeline 'Nome do Artista'")
+        sys.exit(1)
+
+    artist_name = sys.argv[1]  # Obtenha o nome do artista da linha de comando
     etl_pipeline(artist_name)

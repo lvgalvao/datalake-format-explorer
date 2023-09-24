@@ -4,16 +4,12 @@
 
 import base64
 import os
+import sys  # Adicione esta importação
 
 import httpx
 from dotenv import load_dotenv
 
-from ..models.spotify_models import (
-    AlbumDetails,
-    ArtistDetails,
-    CompleteArtistDetails,
-    TrackDetails,
-)
+from ..models.spotify_models import AlbumDetails, CompleteArtistDetails, TrackDetails
 
 # Carregar variáveis de ambiente do arquivo .env que está na raiz
 env_path = os.path.join(
@@ -150,5 +146,10 @@ def get_all_artist_details(artist_name: str) -> list[CompleteArtistDetails]:
 
 
 if __name__ == "__main__":
-    raul_details = get_all_artist_details("Raul Seixas")
+    if len(sys.argv) != 2:
+        print("Uso: python -m app.manager_spotify 'Nome do Artista'")
+        sys.exit(1)
+
+    artist_name = sys.argv[1]  # Obtenha o nome do artista da linha de comando
+    raul_details = get_all_artist_details(artist_name)
     print(raul_details)

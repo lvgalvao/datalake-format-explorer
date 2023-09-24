@@ -1,12 +1,84 @@
-# Desafio do Raul - Datalake Format Explorer
+# Datalake Format Explorer
 
-## Projeto de portfolio - Parte I
+## Desafio do Raul I
 
-1. Pegue algum conjunto de dados público qualquer
-2. Carregue os dados com Python
-3. Criei o código em Python para enviar os para um datalake em cloud (AWS, Azure, GCP,...)
-4. Tu enviaste os dados para a cloud usando Python. Agora, refaça a tarefa usando linha de comando (AWS CLI por exemplo)\
-5. O plano é fazer todas as etapas acima considerando que tu vais enviar um arquivo nos formatos .csv, .parquet, .json e .xls para o datalake
-6. Eu quero ver uma tabela mostrando qual formato de arquivo é melhor !
+Este é um projeto de exemplo que demonstra um processo de ETL (Extração, Transformação e Carga) de dados usando Python, Polars e AWS LocalStack. Ele foi projetado para extrair informações de um artista musical do Spotify, transformar esses dados em diferentes formatos e carregá-los em um "datalake" local usando o LocalStack.
 
-## Descrição do projeto
+Alguns pontos interessantes:
+
+- Substituição do `requests` pelo `httpx` para melhorar a performance da extração de dados.
+- Uso do `Polars` para transformar os dados extraídos em diferentes formatos.
+- Uso do `LocalStack` para simular um ambiente AWS localmente.
+- Uso do `Docker Compose` para configurar o LocalStack e o ambiente de desenvolvimento.
+- Uso do `Make` para automatizar a execução de tarefas comuns.
+- Uso do `Mkdocs` para gerar a documentação do projeto.
+
+## Documentação do projeto
+
+## Pré-requisitos
+
+- Docker: [Instalação do Docker](https://docs.docker.com/get-docker/)
+- Make (opcional, mas recomendado): [Instalação do Make](https://www.gnu.org/software/make/)
+- Poetry: [Instalação do Poetry](https://python-poetry.org/docs/#installation)
+
+## Como Executar
+
+1. Clone este repositório:
+
+   ```bash
+   git clone https://github.com/lvgalvaofilho/datalake-format-explorer.git
+    ```
+
+2. Navegue até o diretório do projeto:
+
+    ```bash
+    cd datalake-format-explorer
+    ```
+
+3. Crie um arquivo `.env` na raiz do projeto com suas credenciais do Spotify:
+
+    ```env
+    SPOTIFY_CLIENT_ID=sua-chave-de-cliente
+    SPOTIFY_CLIENT_SECRET=sua-chave-secreta
+    ```
+
+4. Instale as dependências do projeto com Poetry:
+
+    ```bash
+    poetry install
+    ```
+
+5. Ative o ambiente virtual do Poetry:
+
+    ```bash
+    poetry shell
+    ```
+
+6. Inicie o Docker Compose para configurar o LocalStack:
+
+    ```bash
+    docker-compose up
+    ```
+
+7. Execute a pipeline ETL com o Make, substituindo `"Nome do Artista"` pelo nome do artista que você deseja processar:
+
+    ```bash
+    make run artist="Nome do Artista"
+    ```
+
+    Certifique-se de usar aspas duplas ao redor do nome do artista se o nome tiver espaços.
+
+8. Alternativamente, você pode executar a pipeline usando o ambiente Poetry. Após ativar o ambiente virtual, execute o seguinte comando, substituindo `"Nome do Artista"` pelo nome do artista que você deseja processar:
+
+    ```bash
+    python -m app.pipeline "Nome do Artista"
+    ```
+
+9. Após a execução, os dados do artista serão extraídos, transformados em diferentes formatos (CSV, JSON e Parquet) e carregados em um "datalake" local.
+
+10. Os arquivos gerados podem ser encontrados na pasta `data` do projeto e também serão enviados para o LocalStack S3, onde você pode acessá-los usando as ferramentas do LocalStack.
+
+
+## Licença
+
+Este projeto está licenciado sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para obter detalhes.
