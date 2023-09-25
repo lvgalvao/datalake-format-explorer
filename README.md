@@ -89,8 +89,4 @@ Apresenta um UI bem interessante
 
 10. É gerado um arquivo análise.log com o resultado da análise de tamanho dos arquivos gerados.
 
-Análise de tamanho dos arquivos para Beatles:
-amanho total do arquivo CSV: 40381 bytes
-Tamanho total do arquivo JSON: 43982 bytes
-Tamanho total do arquivo Parquet: 8717 bytes
-**Formato recomendado: Parquet**
+![Log](static/log.png)
