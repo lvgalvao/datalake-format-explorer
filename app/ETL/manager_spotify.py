@@ -1,15 +1,14 @@
-"""Módulo para gerenciar o Spotify."""
-
 # manager_spotify.py
 
 import base64
 import os
-import sys  # Adicione esta importação
+import sys
+from typing import List
 
-import httpx
 from dotenv import load_dotenv
 
 from ..models.spotify_models import AlbumDetails, CompleteArtistDetails, TrackDetails
+from .handler_http import HTTPMETHODS, HTTPRequest, make_http_request
 
 # Carregar variáveis de ambiente do arquivo .env que está na raiz
 env_path = os.path.join(
@@ -21,7 +20,7 @@ SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 
 
-def get_spotify_access_token() -> str:
+async def get_spotify_access_token() -> str:
     """
     Obtém o access token do Spotify.
 
@@ -34,13 +33,17 @@ def get_spotify_access_token() -> str:
     ).decode("utf-8")
     headers = {"Authorization": f"Basic {auth_header}"}
     data = {"grant_type": "client_credentials"}
-    response = httpx.post(AUTH_URL, headers=headers, data=data)
-    token_response_data = response.json()
+
+    # Faz a solicitação usando o http_handler
+    response = await make_http_request(
+        HTTPRequest(url=AUTH_URL, method=HTTPMETHODS.POST, headers=headers, data=data)
+    )
+    token_response_data = response
     print(f"[INFO] Access token: {token_response_data['access_token']}")
     return token_response_data["access_token"]
 
 
-def search_artist(name: str, token: str) -> str:
+async def search_artist(name: str, token: str) -> str:
     """
     Procura por um artista no Spotify e retorna o ID do primeiro resultado.
 
@@ -54,12 +57,18 @@ def search_artist(name: str, token: str) -> str:
     BASE_URL = "https://api.spotify.com/v1/search"
     headers = {"Authorization": f"Bearer {token}"}
     params = {"q": name, "type": "artist", "limit": 1}
-    response = httpx.get(BASE_URL, headers=headers, params=params)
-    data = response.json()
+
+    # Faz a solicitação usando o http_handler
+    response = await make_http_request(
+        HTTPRequest(
+            url=BASE_URL, method=HTTPMETHODS.GET, headers=headers, params=params
+        )
+    )
+    data = response
     return data["artists"]["items"][0]["id"]
 
 
-def get_artist_albums(artist_id: str, token: str) -> list:
+async def get_artist_albums(artist_id: str, token: str) -> List[AlbumDetails]:
     """
     Obtém os álbuns de um artista.
 
@@ -68,12 +77,16 @@ def get_artist_albums(artist_id: str, token: str) -> list:
         token (str): Access token.
 
     Returns:
-        list: Lista de objetos AlbumDetails.
+        List[AlbumDetails]: Lista de objetos AlbumDetails.
     """
     BASE_URL = f"https://api.spotify.com/v1/artists/{artist_id}/albums"
     headers = {"Authorization": f"Bearer {token}"}
-    response = httpx.get(BASE_URL, headers=headers)
-    albums_data = response.json()["items"]
+
+    # Faz a solicitação usando o http_handler
+    response = await make_http_request(
+        HTTPRequest(url=BASE_URL, method=HTTPMETHODS.GET, headers=headers)
+    )
+    albums_data = response["items"]
     return [
         AlbumDetails(
             id=album["id"],
@@ -85,7 +98,7 @@ def get_artist_albums(artist_id: str, token: str) -> list:
     ]
 
 
-def get_album_tracks(album_id: str, token: str) -> list[TrackDetails]:
+async def get_album_tracks(album_id: str, token: str) -> List[TrackDetails]:
     """
     Obtém as músicas de um álbum.
 
@@ -94,12 +107,16 @@ def get_album_tracks(album_id: str, token: str) -> list[TrackDetails]:
         token (str): Access token.
 
     Returns:
-        list: Lista de objetos TrackDetails.
+        List[TrackDetails]: Lista de objetos TrackDetails.
     """
     BASE_URL = f"https://api.spotify.com/v1/albums/{album_id}/tracks"
     headers = {"Authorization": f"Bearer {token}"}
-    response = httpx.get(BASE_URL, headers=headers)
-    tracks_data = response.json()["items"]
+
+    # Faz a solicitação usando o http_handler
+    response = await make_http_request(
+        HTTPRequest(url=BASE_URL, method=HTTPMETHODS.GET, headers=headers)
+    )
+    tracks_data = response["items"]
     return [
         TrackDetails(
             id=track["id"],
@@ -113,7 +130,7 @@ def get_album_tracks(album_id: str, token: str) -> list[TrackDetails]:
     ]
 
 
-def get_all_artist_details(artist_name: str) -> list[CompleteArtistDetails]:
+async def get_all_artist_details(artist_name: str) -> List[CompleteArtistDetails]:
     """
     Obtém todos os detalhes de um artista.
 
@@ -121,15 +138,15 @@ def get_all_artist_details(artist_name: str) -> list[CompleteArtistDetails]:
         artist_name (str): Nome do artista.
 
     Returns:
-        list: Lista de objetos CompleteArtistDetails.
+        List[CompleteArtistDetails]: Lista de objetos CompleteArtistDetails.
     """
-    token = get_spotify_access_token()
-    artist_id = search_artist(artist_name, token)
-    albums = get_artist_albums(artist_id, token)
+    token = await get_spotify_access_token()
+    artist_id = await search_artist(artist_name, token)
+    albums = await get_artist_albums(artist_id, token)
     all_tracks = []
 
     for album in albums:
-        tracks = get_album_tracks(album.id, token)
+        tracks = await get_album_tracks(album.id, token)
         for track in tracks:
             all_tracks.append(
                 CompleteArtistDetails(
@@ -150,6 +167,7 @@ if __name__ == "__main__":
         print("Uso: python -m app.manager_spotify 'Nome do Artista'")
         sys.exit(1)
 
-    artist_name = sys.argv[1]  # Obtenha o nome do artista da linha de comando
-    raul_details = get_all_artist_details(artist_name)
-    print(raul_details)
+    artist_name = sys.argv[1]
+    import asyncio
+
+    asyncio.run(get_all_artist_details(artist_name))

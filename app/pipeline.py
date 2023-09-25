@@ -1,7 +1,9 @@
-"""Essa módulo é responsável por executar a pipeline de ETL."""
+# pipeline.py
 
+import asyncio
 import os
 import sys
+import time
 
 from loguru import logger
 
@@ -13,7 +15,7 @@ logger.remove()  # Remove qualquer configuração de log anterior (opcional)
 logger.add("análise.log", rotation="10 MB", level="INFO")
 
 
-def analyze_file_sizes(artist_name: str):
+async def analyze_file_sizes(artist_name: str):
     """
     Analisa e compara o tamanho dos arquivos gerados em diferentes formatos.
     Recomenda o formato com o menor volume total.
@@ -66,12 +68,16 @@ def analyze_file_sizes(artist_name: str):
     return smallest_format
 
 
-def etl_pipeline(artist_name: str):
+async def etl_pipeline(artist_name: str):
     """
     Executa a pipeline de ETL.
     """
+    # Step 0: Start timer
+
+    start_time = time.time()
+
     # Step 1: Extract and transform data
-    artist_details = get_all_artist_details(artist_name)
+    artist_details = await get_all_artist_details(artist_name)
 
     # Step 2: Save data to different formats
     save_data_to_formats(artist_details, artist_name)
@@ -87,8 +93,15 @@ def etl_pipeline(artist_name: str):
         upload_to_s3(f"data/{file_name}", bucket_name)
 
     # Step 5: Analyze file sizes and recommend format
-    recommended_format = analyze_file_sizes(artist_name)
+    recommended_format = await analyze_file_sizes(artist_name)
     logger.info(f"Formato recomendado: {recommended_format}")
+
+    # Step 6: Stop timer and print total time
+
+    end_time = time.time()
+    total_time = end_time - start_time
+
+    logger.info(f"Tempo total de execução: {total_time} segundos")
 
 
 if __name__ == "__main__":
@@ -97,4 +110,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     artist_name = sys.argv[1]  # Obtenha o nome do artista da linha de comando
-    etl_pipeline(artist_name)
+    asyncio.run(etl_pipeline(artist_name))
