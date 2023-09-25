@@ -26,6 +26,8 @@ Apresenta um UI bem interessante
 
 ## Documentação do projeto
 
+![Mkdocs Page Print](static/mkdocs.png)
+
 [Mkdocs Page](https://lvgalvao.github.io/datalake-format-explorer/)
 
 ## Pré-requisitos
